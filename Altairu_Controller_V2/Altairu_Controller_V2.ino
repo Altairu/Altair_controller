@@ -3,9 +3,9 @@
 #include <Adafruit_SSD1306.h>
 #include <BluetoothSerial.h>
 
-#define OLED_ADDR 0x3C // OLEDのI2Cアドレス
-#define OLED_SDA 21    // I2Cデータライン
-#define OLED_SCL 22    // I2Cクロックライン
+#define OLED_ADDR 0x3C 
+#define OLED_SDA 21    
+#define OLED_SCL 22    
 
 #define BUTTON_COUNT 8
 #define TOGGLE_COUNT 2
@@ -21,7 +21,7 @@ bool toggleStates[TOGGLE_COUNT];
 
 void setup() {
   Serial.begin(115200);
-  SerialBT.begin("ESP32_Controller"); // Bluetoothデバイス名
+  SerialBT.begin("ESP32_Controller");
 
   display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);
   display.display();
