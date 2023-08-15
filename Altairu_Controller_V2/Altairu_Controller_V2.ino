@@ -3,18 +3,17 @@
 #include <Adafruit_SSD1306.h>
 #include <BluetoothSerial.h>
 
-#define OLED_ADDR 0x3C 
-#define OLED_SDA 21    
-#define OLED_SCL 22    
-
+#define OLED_ADDR 0x3C
+#define OLED_SDA 21
+#define OLED_SCL 22
 #define BUTTON_COUNT 8
 #define TOGGLE_COUNT 2
 
 BluetoothSerial SerialBT;
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
 
-int buttonPins[BUTTON_COUNT] = {4, 5, 18, 19, 26, 27, 33, 32};
-int togglePins[TOGGLE_COUNT] = {35, 34};
+int buttonPins[BUTTON_COUNT] = { 4, 5, 18, 19, 26, 27, 33, 32 };
+int togglePins[TOGGLE_COUNT] = { 35, 34 };
 
 bool buttonStates[BUTTON_COUNT];
 bool toggleStates[TOGGLE_COUNT];
@@ -29,13 +28,13 @@ void setup() {
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
-  
+
   for (int i = 0; i < BUTTON_COUNT; i++) {
     pinMode(buttonPins[i], INPUT_PULLUP);
   }
-  
+
   for (int i = 0; i < TOGGLE_COUNT; i++) {
-    pinMode(togglePins[i], INPUT_PULLUP);
+    pinMode(togglePins[i], INPUT);
   }
 }
 
@@ -49,7 +48,7 @@ void loop() {
     toggleStates[i] = digitalRead(togglePins[i]) == LOW;
   }
 
-  // Bluetoothで送信
+  // Bluetooth
   String data = "";
   for (int i = 0; i < BUTTON_COUNT; i++) {
     data += String(buttonStates[i]);
@@ -68,6 +67,16 @@ void loop() {
     display.print(": ");
     display.println(buttonStates[i] ? "ON" : "OFF");
   }
+
+  for (int i = 0; i < TOGGLE_COUNT; i++) {
+    display.setCursor(64, i * 10);
+    display.print("T");
+    display.print(i);
+    display.print(": ");
+    display.println(toggleStates[i] ? "ON" : "OFF");
+  }
+
+
   display.display();
-  delay(100); 
+  delay(100);
 }
