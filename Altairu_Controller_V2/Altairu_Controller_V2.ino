@@ -13,10 +13,10 @@
 BluetoothSerial SerialBT;
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
 
-int buttonPins[BUTTON_COUNT] = {4, 5, 18, 19, 26, 27, 33, 32};
-int togglePins[TOGGLE_COUNT] = {35, 34};
+int buttonPins[BUTTON_COUNT] = { 4, 5, 18, 19, 26, 27, 33, 32 };
+int togglePins[TOGGLE_COUNT] = { 35, 34 };
 
-float thresholdVoltage = 2.7; // 閾値電圧（OFFの時の電圧）
+float thresholdVoltage = 2.7;  // 閾値電圧（OFFの時の電圧）
 bool buttonStates[BUTTON_COUNT];
 bool toggleStates[TOGGLE_COUNT];
 
@@ -46,7 +46,7 @@ void loop() {
   }
 
   for (int i = 0; i < TOGGLE_COUNT; i++) {
-    float voltage = analogRead(togglePins[i]) * (3.3 / 4095.0); // アナログ読み取り（0-4095）を電圧に変換
+    float voltage = analogRead(togglePins[i]) * (3.3 / 4095.0);  // アナログ読み取り（0-4095）を電圧に変換
     toggleStates[i] = voltage < thresholdVoltage;
   }
 
@@ -69,6 +69,18 @@ void loop() {
   }
 
   display.display();
+
+  SerialBT.print("B:");
+  for (int i = 0; i < BUTTON_COUNT; i++) {
+    SerialBT.print(buttonStates[i]);
+    SerialBT.print(",");
+  }
+  SerialBT.print("T:");
+  for (int i = 0; i < TOGGLE_COUNT; i++) {
+    SerialBT.print(toggleStates[i]);
+    SerialBT.print(",");
+  }
+  SerialBT.println();
 
   delay(100);
 }
