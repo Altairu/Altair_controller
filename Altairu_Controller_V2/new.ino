@@ -10,10 +10,6 @@
 #define BUTTON_COUNT 8
 #define TOGGLE_COUNT 2
 
-String MACadd = "EC:62:60:9C:0C:26"; // 黄色 EC:62:60:9C:0C:26 本番 E8:68:E7:31:17:1E
-uint8_t address[6] = { 0xe8, 0x68, 0xe7, 0x31, 0x17, 0x1e };
-bool connected;
-
 BluetoothSerial SerialBT;
 Adafruit_SSD1306 display(128, 64, &Wire, -1);
 
@@ -26,20 +22,20 @@ bool toggleStates[TOGGLE_COUNT];
 
 void setup() {
   Serial.begin(115200);
-  SerialBT.begin("ESP32test", true);
   Serial.println("device start");
 
-  connected = SerialBT.connect(address);
-  if (connected) {
-    Serial.println("Connect OK");
-  } else {
-    Serial.println("No connect");
-  }
-  if (SerialBT.disconnect()) {
-    Serial.println("Disconnected Successfully!");
-  }
-
-  SerialBT.connect();
+  // Bluetoothの初期化をコメントアウト
+  // SerialBT.begin("ESP32test", true);
+  // connected = SerialBT.connect(address);
+  // if (connected) {
+  //   Serial.println("Connect OK");
+  // } else {
+  //   Serial.println("No connect");
+  // }
+  // if (SerialBT.disconnect()) {
+  //   Serial.println("Disconnected Successfully!");
+  // }
+  // SerialBT.connect();
 
   display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);
   display.display();
@@ -75,6 +71,12 @@ void loop() {
     display.print(i);
     display.print(": ");
     display.println(buttonStates[i] ? "ON" : "OFF");
+
+    // シリアルモニタにボタンの状態を表示
+    Serial.print("Button ");
+    Serial.print(i);
+    Serial.print(": ");
+    Serial.println(buttonStates[i] ? "Pressed" : "Released");
   }
 
   for (int i = 0; i < TOGGLE_COUNT; i++) {
@@ -83,37 +85,15 @@ void loop() {
     display.print(i);
     display.print(": ");
     display.println(toggleStates[i] ? "ON" : "OFF");
+
+    // シリアルモニタにトグルスイッチの状態を表示
+    Serial.print("Toggle ");
+    Serial.print(i);
+    Serial.print(": ");
+    Serial.println(toggleStates[i] ? "ON" : "OFF");
   }
 
   display.display();
-
-  for (int i = 0; i < BUTTON_COUNT; i++) {
-    Serial.print("B");
-    Serial.print(i);
-    Serial.print(": ");
-    Serial.print(buttonStates[i] ? "ON" : "OFF");
-    Serial.print(" ");
-  }
-  for (int i = 0; i < TOGGLE_COUNT; i++) {
-    Serial.print("T");
-    Serial.print(i);
-    Serial.print(": ");
-    Serial.print(toggleStates[i] ? "ON" : "OFF");
-    Serial.print(" ");
-  }
-  Serial.println();
-
-  if (SerialBT.connected()) {
-    for (int i = 0; i < BUTTON_COUNT; i++) {
-      SerialBT.print(buttonStates[i]);
-      SerialBT.print(",");
-    }
-    for (int i = 0; i < TOGGLE_COUNT; i++) {
-      SerialBT.print(toggleStates[i]);
-      SerialBT.print(",");
-    }
-    SerialBT.println();
-  }
 
   delay(100);
 }
