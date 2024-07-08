@@ -66,32 +66,32 @@ void loop() {
   display.clearDisplay();
   display.setCursor(0, 0);
 
+  // 配列として表示
+  display.print("Buttons: ");
+  Serial.print("Buttons: [");
   for (int i = 0; i < BUTTON_COUNT; i++) {
-    display.print("B");
-    display.print(i);
-    display.print(": ");
-    display.println(buttonStates[i] ? "ON" : "OFF");
-
-    // シリアルモニタにボタンの状態を表示
-    Serial.print("Button ");
-    Serial.print(i);
-    Serial.print(": ");
-    Serial.println(buttonStates[i] ? "Pressed" : "Released");
+    display.print(buttonStates[i] ? "1" : "0");
+    Serial.print(buttonStates[i] ? "1" : "0");
+    if (i < BUTTON_COUNT - 1) {
+      display.print(",");
+      Serial.print(",");
+    }
   }
+  display.println("]");
+  Serial.println("]");
 
+  display.print("Toggles: ");
+  Serial.print("Toggles: [");
   for (int i = 0; i < TOGGLE_COUNT; i++) {
-    display.setCursor(64, i * 10);
-    display.print("T");
-    display.print(i);
-    display.print(": ");
-    display.println(toggleStates[i] ? "ON" : "OFF");
-
-    // シリアルモニタにトグルスイッチの状態を表示
-    Serial.print("Toggle ");
-    Serial.print(i);
-    Serial.print(": ");
-    Serial.println(toggleStates[i] ? "ON" : "OFF");
+    display.print(toggleStates[i] ? "1" : "0");
+    Serial.print(toggleStates[i] ? "1" : "0");
+    if (i < TOGGLE_COUNT - 1) {
+      display.print(",");
+      Serial.print(",");
+    }
   }
+  display.println("]");
+  Serial.println("]");
 
   display.display();
 
